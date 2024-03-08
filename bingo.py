@@ -10,33 +10,33 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, Spacer, Image
 
-#CONSTANTES
-ESPACE = 2 
-RACINE = Path('/usr/local/include/images')
-MARGES = 0.5 * cm
-rec= Path.cwd() / 'Grilles-bingo.pdf'
-u=str(rec.resolve())
+#CONSTANTS
+SPACE = 2 
+MARGIN = 0.5 * cm
 
-doc = SimpleDocTemplate(u,
+OUTPUT = Path.cwd() / 'bingo-grid.pdf'
+fo=str(OUTPUT.resolve())
+
+doc = SimpleDocTemplate(fo,
                         pagesize = A4,
-                        marginLeft = MARGES ,
-                        marginRight = MARGES ,
-                        marginTop = MARGES ,
-                        marginBottom = MARGES ,
+                        marginLeft = MARGIN ,
+                        marginRight = MARGIN ,
+                        marginTop = MARGIN ,
+                        marginBottom = MARGIN ,
                         )
 
 # grid quantity on shell demand
 
 if (len(sys.argv) == 1):
-    NOMBRE_DE_GRILLES = 3
+    GRIDS = 3
 else:
-    NOMBRE_DE_GRILLES = int(sys.argv[1])
+    GRIDS = int(sys.argv[1])
 
-#fonctions
+#functions
 def Calcul_taille_cellule(largeur_totale,marge,quantité):
     return ((largeur_totale - 2 * marge) / quantité) 
 
-TAILLE = Calcul_taille_cellule(A4[0],MARGES,9)
+TAILLE = Calcul_taille_cellule(A4[0],MARGIN,9)
 
 
 def gen_grille(n):
@@ -45,9 +45,8 @@ def gen_grille(n):
     Return array (3 list of 9 elements) of random figures
     fr - Renvoi un tableau (liste de 3 liste à 9 éléments) de nombre aléatoires
     """
-    fich = RACINE / 'icone-bingo.png'
-    f = str(fich.resolve())
-    I = Image (f)
+    fich = 'icone-bingo.png'
+    I = Image (fich)
     I.drawHeight = TAILLE - 15
     I.drawWidth = TAILLE - 15
     Grille = sample(tuple(range(1,n+1)),15)
@@ -61,7 +60,7 @@ def ajout_table(data):
     """
     Création du tableau sur reportlab à partir d'une liste python
     """
-    t=Table(data, colWidths = TAILLE, rowHeights= TAILLE, spaceAfter= ESPACE * cm) 
+    t=Table(data, colWidths = TAILLE, rowHeights= TAILLE, spaceAfter= SPACE * cm) 
     t.setStyle(TableStyle([('GRID',(0,0),(-1,-1),1,colors.black),
                            ('FONTSIZE', (0,0), (-1,-1),28 ),
                            ('ALIGN',(0,0),(-1,-1),'CENTER'),
@@ -89,5 +88,5 @@ def Gen_pdf(NOMBRE) :
 
 if __name__ == '__main__':
     
-    Gen_pdf(NOMBRE_DE_GRILLES)
-    print(f'le fichier se trouve à {u}')
+    Gen_pdf(GRIDS)
+    print(f'le fichier se trouve à {fo}')
