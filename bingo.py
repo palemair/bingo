@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
-
 import sys
 from pathlib import Path
 from random import sample, shuffle
@@ -10,7 +9,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, Spacer, Image
 
-#CONSTANTS
+#CONST
 SPACE = 2 
 MARGIN = 0.5 * cm
 
@@ -25,42 +24,39 @@ doc = SimpleDocTemplate(fo,
                         marginBottom = MARGIN ,
                         )
 
-# grid quantity on shell demand
+SIZE_CELL = ((A4[0] - (2 * MARGIN)) / 9)
+GRIDS = 3
 
-if (len(sys.argv) == 1):
-    GRIDS = 3
-else:
+# get cli arguments
+
+if (len(sys.argv) == 2):
     GRIDS = int(sys.argv[1])
 
 #functions
-def Calcul_taille_cellule(largeur_totale,marge,quantité):
-    return ((largeur_totale - 2 * marge) / quantité) 
 
-TAILLE = Calcul_taille_cellule(A4[0],MARGIN,9)
-
-
-def gen_grille(n):
+def gen_grid(n):
 
     """"
-    Return array (3 list of 9 elements) of random figures
+    Return an array (3 list of 9 elements) of random figures
     fr - Renvoi un tableau (liste de 3 liste à 9 éléments) de nombre aléatoires
     """
-    fich = 'icone-bingo.png'
-    I = Image (fich)
-    I.drawHeight = TAILLE - 15
-    I.drawWidth = TAILLE - 15
+    FILE_IMG = 'icone-bingo.png'
+    I = Image (FILE_IMG)
+    I.drawHeight = SIZE_CELL - 15
+    I.drawWidth = SIZE_CELL - 15
     Grille = sample(tuple(range(1,n+1)),15)
-    carton = [Grille[:5],Grille[5:10], Grille[10:]]
-    for l in carton:
+    card = [Grille[:5],Grille[5:10], Grille[10:]]
+    for l in card:
         l.extend([I]*4)
         shuffle(l)
-    return carton
+    return card
 
-def ajout_table(data):
+def add_table(data):
     """
-    Création du tableau sur reportlab à partir d'une liste python
+    reportlab table from a python list.
+    fr - Création du tableau sur reportlab à partir d'une liste python
     """
-    t=Table(data, colWidths = TAILLE, rowHeights= TAILLE, spaceAfter= SPACE * cm) 
+    t=Table(data, colWidths = SIZE_CELL, rowHeights= SIZE_CELL, spaceAfter= SPACE * cm) 
     t.setStyle(TableStyle([('GRID',(0,0),(-1,-1),1,colors.black),
                            ('FONTSIZE', (0,0), (-1,-1),28 ),
                            ('ALIGN',(0,0),(-1,-1),'CENTER'),
@@ -74,19 +70,19 @@ def ajout_table(data):
                           ]))
     return t
 
-def Gen_pdf(NOMBRE) :
+def pdf(NUMBER) :
     styles = getSampleStyleSheet()
     styleN = styles['BodyText']
     story = []
 
     #add some flowables
 
-    for i in range(NOMBRE):
-        story.append(ajout_table(gen_grille(90)))
+    for i in range(NUMBER):
+        story.append(add_table(gen_grid(90)))
 
     doc.build(story)
 
 if __name__ == '__main__':
     
-    Gen_pdf(GRIDS)
+    pdf(GRIDS)
     print(f'le fichier se trouve à {fo}')
