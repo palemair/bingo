@@ -30,7 +30,11 @@ GRIDS = 3
 # get cli arguments
 
 if (len(sys.argv) == 2):
-    GRIDS = int(sys.argv[1])
+    try :
+        GRIDS = int(sys.argv[1])
+    except ValueError:
+        print("Bad value, try again ...")
+        sys.exit()
 
 #functions
 
