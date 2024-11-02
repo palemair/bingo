@@ -50,6 +50,8 @@ def gen_grid(n):
     I.drawWidth = SIZE_CELL - 15
     Grille = sample(tuple(range(1,n+1)),15)
     card = [Grille[:5],Grille[5:10], Grille[10:]]
+    # for line in card:
+    #     line = [str(x) for x in line]
     for l in card:
         l.extend([I]*4)
         shuffle(l)
@@ -63,13 +65,14 @@ def add_table(data):
     t=Table(data, colWidths = SIZE_CELL, rowHeights= SIZE_CELL, spaceAfter= SPACE * cm) 
     t.setStyle(TableStyle([('GRID',(0,0),(-1,-1),1,colors.black),
                            ('FONTSIZE', (0,0), (-1,-1),28 ),
+                           ('LEADING',(0,0),(-1,-1),18),
                            ('ALIGN',(0,0),(-1,-1),'CENTER'),
                            ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
                            ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
                            ('RIGHTPADDING', (0,0), (-1,-1), 0),
                            ('LEFTPADDING', (0,0), (-1,-1), 0),
                            ('TOPPADDING', (0,0), (-1,-1), 0),
-                           ('BOTTOMPADDING', (0,0), (-1,-1), 15),
+                           ('BOTTOMPADDING', (0,0), (-1,-1), 0),
                            ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                           ]))
     return t
