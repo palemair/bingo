@@ -11,6 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle, Spacer, Image
 
+#functions
 def add_table(data):
     """
     reportlab table from a python list.
@@ -30,10 +31,6 @@ def add_table(data):
                           ]))
     return t
 
-# get cli arguments
-
-
-#functions
 def get_sample(data : Sequence, nb : int)->list:
     
     ensemble = list(data)
@@ -92,6 +89,7 @@ if __name__ == '__main__':
                             marginBottom = MARGIN ,
                             )
 
+    # get cli arguments
     if (len(sys.argv) == 2):
         try :
             GRIDS = int(sys.argv[1])
